@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Sudoku from "./containers/Sudoku/Sudoku";
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
+
+import appUIreducer from "./store/reducers/appUIreducer";
+import sudokuReducer from "./store/reducers/sudokuReducer";
+
+const store = createStore(
+  combineReducers({
+    appUI: appUIreducer,
+    sudoku: sudokuReducer,
+  })
+);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <h1 className="GlowOnHover">
+          Sudoku Game <span>♨︎</span>
+        </h1>
+        <Sudoku />
+      </div>
+    </Provider>
   );
 }
 
