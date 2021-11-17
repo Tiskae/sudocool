@@ -1,1 +1,9 @@
+// APP UI actions
 export const ACTIVATE_CELL = "ACTIVATE_CELL";
+export const SET_ACTIVE_CELL_STATE = "SET_ACTIVE_CELL_STATE";
+
+// Sudoku game actions
+export const SET_SUDOKU_STATE = "SET_SUDOKU_STATE";
+export const SET_INVALID_CELLS = "SET_INVALID_CELLS";
+export const SET_INVALID_ROWS = "SET_INVALID_ROWS";
+export const SET_INVALID_COLUMNS = "SET_INVALID_COLUMNS";

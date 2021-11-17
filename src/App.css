@@ -9,7 +9,16 @@ body {
   width: 100vw;
 }
 
-.GlowOnHover:hover span {
+.App {
+}
+
+.Container {
+  display: grid;
+  grid-template-columns: 1fr 3.5rem;
+  gap: 3rem;
+}
+
+.GlowOnHover span {
   animation: glowOnHover 3s infinite alternate;
 }
 

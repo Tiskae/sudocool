@@ -1,0 +1,18 @@
+.SudokuBoxes {
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  background-color: black;
+  gap: 3px;
+  /* order: 2; */
+}
+
+.GridBox {
+  background-color: white;
+}
+
+.GridBox:first-of-type {
+  /* background-color: yellow; */
+}
