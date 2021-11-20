@@ -10,7 +10,7 @@ const AuthorInfo = () => {
           className={classes.AuthorLink}
           rel="noreferrer"
           target="_blank"
-          href="https://tiskae.netlify.app"
+          href="https://tiskae.netlify.app/"
         >
           Ibrahim Adedokun
         </a>
