@@ -19,7 +19,7 @@
   transform: translateY(0);
 }
 
-@media only screen and (max-width: 54em) {
+@media only screen and (max-width: 54em), only screen and (hover: none) {
   .Options {
     grid-template-columns: 1fr;
     gap: 1rem;

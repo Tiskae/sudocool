@@ -32,8 +32,8 @@
   gap: 1rem;
 }
 
-.HeadingTitle {
-}
+/* .HeadingTitle {
+} */
 
 .HeadingTitle span {
   animation: glowOnHover 3s infinite alternate;

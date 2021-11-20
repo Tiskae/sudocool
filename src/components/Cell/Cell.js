@@ -11,7 +11,13 @@ const Cell = (props) => {
     cellClasses.push(classes.Default);
     tabIndex = "";
   }
-  if (props.isInvalid) cellClasses.push(classes.Invalid);
+  if (props.isInvalid) {
+    cellClasses.push(classes.Invalid);
+  }
+
+  if (props.active) {
+    cellClasses.push(classes.Active);
+  }
 
   const onFocusHandler = () => {
     props.cellFocusHandler(props.row, props.column);
@@ -35,4 +41,5 @@ Cell.propTypes = {
   row: PropTypes.number,
   column: PropTypes.number,
   column: PropTypes.number,
+  active: PropTypes.bool,
 };

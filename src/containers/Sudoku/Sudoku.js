@@ -221,6 +221,9 @@ const Sudoku = (props) => {
               isDefault={props.defaultCellCoordinates.some(
                 (el) => el[0] === row && el[1] === column
               )}
+              active={
+                row == props.activeCell.row && column == props.activeCell.column
+              }
             />
           );
         })}
