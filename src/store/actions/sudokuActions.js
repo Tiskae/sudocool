@@ -40,3 +40,64 @@ export const setInvalidColumns = (invalidColumns) => {
     },
   };
 };
+
+export const setPuzzleAndSolvedPuzzle = () => {
+  return {
+    type: actions.SET_PUZZLE_AND_SOLVED_PUZZLE,
+  };
+};
+
+export const solvePuzzle = () => {
+  return {
+    type: actions.SOLVE_PUZZLE,
+  };
+};
+
+export const sudokuIsSolved = () => {
+  return {
+    type: actions.SUDOKU_IS_SOLVED,
+  };
+};
+
+export const setInvalidBoxesAndNumbers = (
+  invalidBoxesArr,
+  invalidNumbersArr
+) => {
+  return {
+    type: actions.SET_INVALID_BOXES_AND_NUMBERS,
+    payload: {
+      invalidBoxesArr: invalidBoxesArr,
+      invalidNumbersArr: invalidNumbersArr,
+    },
+  };
+};
+
+export const solvePuzzleForUser = () => {
+  return {
+    type: actions.SOLVE_SUDOKU_FOR_USER,
+  };
+};
+
+export const initUserInputSUdokuToSolve = () => {
+  return {
+    type: actions.INIT_USER_INPUT_SUDOKU_TO_SOLVE,
+  };
+};
+
+export const setGameMode = (mode) => {
+  return {
+    type: actions.SET_GAME_MODE,
+    payload: {
+      mode: mode,
+    },
+  };
+};
+
+export const setDifficulty = (difficulty) => {
+  return {
+    type: actions.SET_DIFFICULTY,
+    payload: {
+      difficulty: difficulty,
+    },
+  };
+};

@@ -7,6 +7,13 @@ import { createStore, combineReducers } from "redux";
 import appUIreducer from "./store/reducers/appUIreducer";
 import sudokuReducer from "./store/reducers/sudokuReducer";
 
+import Layout from "./HOC/Layout/Layout";
+import SudokuBoardContainer from "./HOC/SudokuBoardContainer/SudokuBoardContainer";
+import IntroPage from "./containers/IntroPage/IntroPage";
+import Header from "./containers/Header/Header";
+import Controls from "./containers/Controls/Controls";
+import AuthorInfo from "./components/AuthorInfo/AuthorInfo";
+
 const store = createStore(
   combineReducers({
     appUI: appUIreducer,
@@ -17,15 +24,16 @@ const store = createStore(
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
-        <h1 className="GlowOnHover">
-          Sudoku Game <span>♨︎</span>
-        </h1>
-        <div className="Container">
+      <Layout>
+        <IntroPage />
+        <Header />
+        <SudokuBoardContainer>
           <Sudoku />
           <CellInputs />
-        </div>
-      </div>
+        </SudokuBoardContainer>
+        <Controls />
+        <AuthorInfo />
+      </Layout>
     </Provider>
   );
 }

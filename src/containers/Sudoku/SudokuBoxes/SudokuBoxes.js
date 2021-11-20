@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import SudokuBox from "./SudokuBox/SudokuBox";
 import arrayDuplicated from "array-duplicated";
 import * as classes from "./SudokuBoxes.module.css";
+import * as sudokuActions from "../../../store/actions/sudokuActions";
+
+import PropTypes from "prop-types";
 
 const SudokuBoxes = (props) => {
-  const [state, setState] = useState([]);
-
   useEffect(() => {
     detectInvalidBox();
-    console.log(boxesWithRepeatedNumbers);
   }, [props.sudokuState]);
 
   let boxesWithRepeatedNumbers = [];
+  const invalidNumbersInBox = [];
 
   const detectInvalidBox = () => {
     const s = props.sudokuState;
@@ -74,27 +75,57 @@ const SudokuBoxes = (props) => {
       });
 
       const duplicates = arrayDuplicated(elArrWithoutNull);
+      duplicates.forEach((el, idx) => {
+        if (el && !invalidNumbersInBox.includes(el))
+          invalidNumbersInBox.push(el);
+      });
+
       if (duplicates.length > 0) {
         boxesWithRepeatedNumbersInner.push(idx + 1);
       }
     });
     boxesWithRepeatedNumbers = [...boxesWithRepeatedNumbersInner];
-    setState([...boxesWithRepeatedNumbersInner]);
+    props.setInvalidBoxesAndNumbers(
+      boxesWithRepeatedNumbers,
+      invalidNumbersInBox
+    );
   };
 
   const content = new Array(9)
     .fill("0")
-    .map((el, idx) => (
-      <SudokuBox key={idx} isInvalid={state.includes(idx + 1)} />
-    ));
+    .map((el, idx) => <SudokuBox key={idx} />);
 
-  return <div className={classes.SudokuBoxes}>{content}</div>;
+  const styleClasses = [classes.SudokuBoxes];
+  if (props.isSudokuSolved) {
+    styleClasses.push(classes.Solved);
+  }
+
+  return <div className={styleClasses.join(" ")}>{content}</div>;
 };
 
 const mapStateToProps = (state) => {
   return {
     sudokuState: state.sudoku.sudokuState,
+    isSudokuSolved: state.sudoku.isSudokuSolved,
   };
 };
 
-export default connect(mapStateToProps)(SudokuBoxes);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setInvalidBoxesAndNumbers: (invalidBoxesArr, invalidNumbersArr) =>
+      dispatch(
+        sudokuActions.setInvalidBoxesAndNumbers(
+          invalidBoxesArr,
+          invalidNumbersArr
+        )
+      ),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SudokuBoxes);
+
+SudokuBoxes.propTypes = {
+  sudokuState: PropTypes.array,
+  isSudokuSolved: PropTypes.bool,
+  setInvalidBoxesAndNumbers: PropTypes.func,
+};

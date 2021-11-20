@@ -1,15 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import * as classes from "./Sudoku.module.css";
 import Cell from "../../components/Cell/Cell";
 import * as sudokuActions from "../../store/actions/sudokuActions";
 import * as appUIactions from "../../store/actions/appUIactions";
 import SudokuBoxes from "./SudokuBoxes/SudokuBoxes";
+import * as helpers from "../../helpers/helpers";
+import Feedback from "../../components/Feedback/Feedback";
+import GameRules from "../../components/GameRules/GameRules";
+
+import PropTypes from "prop-types";
 
 const Sudoku = (props) => {
   useEffect(() => {
     checkForRepeatedNumbersInRowsAndColumns();
   }, [props.isAnyCellJustUpdated]);
+
+  useEffect(() => {
+    setShowFeedbackComp(
+      props.isSudokuSolved || props.doesUserInputtedPuzzleHaveError
+    );
+  }, [props.isSudokuSolved, props.doesUserInputtedPuzzleHaveError]);
+
+  const [showFeedbackComp, setShowFeedbackComp] = useState(false);
 
   const generateRepeatedNumbersInRows = (state) => {
     let repeatedNumbersArr = [];
@@ -55,7 +68,6 @@ const Sudoku = (props) => {
       repeatedNumbersArr = repeatedNumbersArr.concat(repeatNums);
     });
 
-    // console.log(repeatedNumbersRows);
     props.setInvalidRows(repeatedNumbersRows);
     return repeatedNumbersArr;
   };
@@ -70,9 +82,7 @@ const Sudoku = (props) => {
         columnFromRow.push(newEl);
       });
       return columnFromRow;
-      // console.log(columnFromRow);
     });
-    // console.log(transformedState);
 
     transformedState.forEach((row, index) => {
       const allNumberCounter = [
@@ -129,7 +139,14 @@ const Sudoku = (props) => {
     const repeatedNumbers = [
       ...new Set([...repeatedNumbersInRows, ...repeatedNumbersInColumns]),
     ];
-    // console.log(repeatedNumbers);
+
+    // Checks if sudoku is solved
+    checkIfSudokuIsSolved(
+      repeatedNumbersInRows,
+      repeatedNumbersInColumns,
+      repeatedNumbers
+    );
+
     props.setInvalidNumbers(repeatedNumbers);
   };
 
@@ -137,22 +154,62 @@ const Sudoku = (props) => {
     props.setActivateCellState(row, column);
   };
 
+  const checkIfSudokuIsSolved = (
+    invalidRows,
+    invalidColumns,
+    invalidNumbers
+  ) => {
+    const sudokuState = [...props.sudokuState];
+    // converting 2-D array to 1-D
+    const flatSudokuState = sudokuState.flat();
+
+    const isAllCellsCompletelyFilled = !flatSudokuState.includes(null);
+
+    const isThereNoInvalidRow = !Boolean(invalidRows.length);
+    const isThereNoInvalidColumn = !Boolean(invalidColumns.length);
+    const isThereNoInvalidNumber = !Boolean(invalidNumbers.length);
+
+    const isSudokuSolved =
+      isAllCellsCompletelyFilled &&
+      isThereNoInvalidRow &&
+      isThereNoInvalidColumn &&
+      isThereNoInvalidNumber;
+
+    if (isSudokuSolved) {
+      props.setSudokuStateToSolved();
+    }
+  };
+
+  const styleClasses = [classes.Sudoku];
+
+  if (props.isSudokuSolved) {
+    styleClasses.push(classes.Solved);
+  }
+
+  const hideFeedbackComp = () => {
+    setShowFeedbackComp(false);
+  };
+
   return (
-    <div className={classes.Sudoku}>
-      {/* For styling grid frames only, no logic */}
+    <div className={styleClasses.join(" ")}>
+      <GameRules show={props.showGameRules} />
       <SudokuBoxes />
 
-      {/* Actual logic */}
+      {/* Sudoku logic */}
       <div className={classes.Content}>
-        {/* {new Array(79).fill("0").map((el, idx) => (
-          <Cell key={idx} value={idx} />
-        ))}
-        <Cell value="" isInvali />
-        <Cell value="80" isDefault /> */}
-
         {props.sudokuState.flat().map((el, i) => {
           const row = Math.floor(i / 9) + 1;
           const column = (i + 1) % 9 === 0 ? 9 : (i + 1) % 9;
+          const boxNumber = helpers.generateBoxNumber(row, column);
+
+          const isInvalidInRowOrColumn =
+            props.invalidNumbersArr.includes(el) &&
+            (props.invalidRows.includes(row) ||
+              props.invalidColumns.includes(column));
+          const isInvalidInBox =
+            props.invalidBoxesArr.includes(boxNumber) &&
+            props.invalidBoxesNumbersArr.includes(el);
+
           return (
             <Cell
               key={i}
@@ -160,34 +217,52 @@ const Sudoku = (props) => {
               cellFocusHandler={cellFocusHandler}
               row={row}
               column={column}
-              isInvalid={
-                props.invalidNumbersArr.includes(el) &&
-                (props.invalidRows.includes(row) ||
-                  props.invalidColumns.includes(column))
-              }
+              isInvalid={isInvalidInRowOrColumn || isInvalidInBox}
+              isDefault={props.defaultCellCoordinates.some(
+                (el) => el[0] === row && el[1] === column
+              )}
             />
           );
         })}
       </div>
-
-      {/* <button onClick={props.setActivateCell}>Test setup!</button> */}
-      {/* <button
-        onClick={() => console.log(props.invalidRows, props.invalidColumns)}
-      >
-        Set inval
-      </button> */}
+      {showFeedbackComp ? (
+        <Feedback
+          show={true}
+          type={props.isSudokuSolved ? "success" : "danger"}
+          message={
+            props.isSudokuSolved
+              ? "Solved"
+              : "That's not solvable. Valid Sudoku don't contain error. Fix errors and try again"
+          }
+          unmountMe={hideFeedbackComp}
+        />
+      ) : null}
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    sudokuState: state.sudoku.sudokuState,
+    // app UI reducer
+    showGameRules: state.appUI.showGameRules,
     activeCell: state.appUI.activeCell,
+
+    // sudoku reducer
+    sudokuState: state.sudoku.sudokuState,
     invalidNumbersArr: state.sudoku.invalidNumbersArr,
     isAnyCellJustUpdated: state.sudoku.isAnyCellJustUpdated,
     invalidRows: state.sudoku.invalidRowsArr,
     invalidColumns: state.sudoku.invalidColumnsArr,
+    invalidBoxesArr: state.sudoku.invalidBoxesArr,
+    invalidBoxesNumbersArr: state.sudoku.invalidBoxesNumbersArr,
+    allValuesAreDefault: state.sudoku.allValuesAreDefault,
+    defaultCellCoordinates: state.sudoku.defaultCellCoordinates,
+    isSudokuSolved: state.sudoku.isSudokuSolved,
+
+    doesUserInputtedPuzzleHaveError:
+      state.sudoku.doesUserInputtedPuzzleHaveError,
+    isUserInputtedPuzzleSolvable: state.sudoku.isUserInputtedPuzzleSolvable,
+    isUserInputtedPuzzleSolved: state.sudoku.isUserInputtedPuzzleSolved,
   };
 };
 
@@ -201,7 +276,34 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(sudokuActions.setInvalidRows(invalidRows)),
     setInvalidColumns: (invalidColumns) =>
       dispatch(sudokuActions.setInvalidColumns(invalidColumns)),
+    setSudokuStateToSolved: () => dispatch(sudokuActions.sudokuIsSolved()),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sudoku);
+
+Cell.propTypes = {
+  showGameRules: PropTypes.bool,
+  activeCell: PropTypes.object,
+
+  // sudoku reducer
+  sudokuState: PropTypes.array,
+  invalidNumbersArr: PropTypes.array,
+  isAnyCellJustUpdated: PropTypes.any,
+  invalidRows: PropTypes.array,
+  invalidColumns: PropTypes.array,
+  invalidBoxesArr: PropTypes.array,
+  invalidBoxesNumbersArr: PropTypes.array,
+  allValuesAreDefault: PropTypes.bool,
+  defaultCellCoordinates: PropTypes.array,
+  isSudokuSolved: PropTypes.bool,
+  doesUserInputtedPuzzleHaveError: PropTypes.bool,
+  isUserInputtedPuzzleSolvable: PropTypes.bool,
+  isUserInputtedPuzzleSolved: PropTypes.bool,
+
+  setActivateCellState: PropTypes.func,
+  setInvalidNumbers: PropTypes.func,
+  setInvalidRows: PropTypes.func,
+  setInvalidColumns: PropTypes.func,
+  setSudokuStateToSolved: PropTypes.func,
+};

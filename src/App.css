@@ -1,5 +1,4 @@
 body {
-  background-color: #000000;
   background-color: white;
   color: black;
   display: grid;
@@ -7,29 +6,4 @@ body {
   align-content: center;
   height: 100vh;
   width: 100vw;
-}
-
-.App {
-}
-
-.Container {
-  display: grid;
-  grid-template-columns: 1fr 3.5rem;
-  gap: 3rem;
-}
-
-.GlowOnHover span {
-  animation: glowOnHover 3s infinite alternate;
-}
-
-@keyframes glowOnHover {
-  0% {
-    color: black;
-  }
-  50% {
-    color: orange;
-  }
-  100% {
-    color: red;
-  }
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import * as classes from "./CellInput.module.css";
+import PropTypes from "prop-types";
 
 const CellInput = (props) => {
   const cellInputClasses = [classes.CellInput];
@@ -15,9 +16,14 @@ const CellInput = (props) => {
 
   return (
     <div className={cellInputClasses.join(" ")} onClick={onClickHandler}>
-      <div className={classes.Progress}></div>
       <p className={classes.Value}>{props.value}</p>
     </div>
   );
 };
 export default CellInput;
+
+CellInput.propTypes = {
+  isClear: PropTypes.bool,
+  cellInputClickedHandler: PropTypes.func,
+  value: PropTypes.any,
+};

@@ -1,0 +1,22 @@
+.AuthorInfo {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 1rem;
+  z-index: 9999999999999999999 /* Highest for this app */;
+}
+
+.AuthorText {
+  color: rgb(90, 89, 89);
+  font-style: italic;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.AuthorLink {
+  color: black;
+}
+
+.AuthorLink:hover {
+  text-decoration: none;
+}

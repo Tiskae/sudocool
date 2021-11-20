@@ -6,13 +6,12 @@
   grid-template-rows: repeat(3, 1fr);
   background-color: black;
   gap: 3px;
-  /* order: 2; */
+}
+
+.Solved {
+  background-color: greenyellow;
 }
 
 .GridBox {
   background-color: white;
-}
-
-.GridBox:first-of-type {
-  /* background-color: yellow; */
 }

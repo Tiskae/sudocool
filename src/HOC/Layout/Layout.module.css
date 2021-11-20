@@ -1,0 +1,46 @@
+.Layout {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  gap: 1rem;
+  grid-template-rows: min-content 70vmin min-content;
+  background-color: cadetblue;
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url("../../assets/bg.jpeg");
+  background-size: cover;
+  position: relative;
+  overflow: scroll;
+}
+
+.BgVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.BgVideo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.95)
+  );
+}
+
+.BgVideo video {
+  height: 100%;
+  width: 100%;
+}

@@ -3,7 +3,3 @@
   width: 100%;
   background-color: white;
 }
-
-.SudokuBox.Invalid {
-  background-color: rgb(230, 140, 140);
-}

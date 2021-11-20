@@ -1,6 +1,8 @@
 import React from "react";
 import * as classes from "./Cell.module.css";
 
+import PropTypes from "prop-types";
+
 const Cell = (props) => {
   const cellClasses = [classes.Cell];
   let tabIndex = "0";
@@ -26,3 +28,11 @@ const Cell = (props) => {
   );
 };
 export default Cell;
+
+Cell.propTypes = {
+  isDefault: PropTypes.bool,
+  isInvalid: PropTypes.bool,
+  row: PropTypes.number,
+  column: PropTypes.number,
+  column: PropTypes.number,
+};
