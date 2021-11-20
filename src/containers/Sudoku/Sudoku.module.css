@@ -1,8 +1,5 @@
 .Sudoku {
   background-color: black;
-  width: 40rem;
-  height: 40rem;
-
   width: 70vmin;
   height: 70vmin;
   padding: 4px;
