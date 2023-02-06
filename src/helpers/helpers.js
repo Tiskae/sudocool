@@ -1,4 +1,4 @@
-import { makepuzzle, solvepuzzle, ratepuzzle } from "sudoku";
+import { makepuzzle, solvepuzzle } from "sudoku";
 
 export const MODE_PLAY = "MODE_PLAY";
 export const MODE_SOLVE = "MODE_SOLVE";
