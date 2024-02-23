@@ -10,7 +10,7 @@ const AuthorInfo = () => {
           className={classes.AuthorLink}
           rel="noreferrer"
           target="_blank"
-          href="https://tiskae.tech"
+          href="https://tiskae.codes"
         >
           Ibrahim Adedokun
         </a>
